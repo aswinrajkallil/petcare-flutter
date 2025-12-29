@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class ProfileManagement extends StatefulWidget {
@@ -20,16 +21,34 @@ class _ProfileManagementState extends State<ProfileManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
+
+      // 🔹 APP BAR
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Color.fromARGB(250, 218, 98, 17),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           'Profile',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Color.fromARGB(250, 218, 98, 17),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pacifico',
+          ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.black,
         actions: [
           IconButton(
-            icon: Icon(isEditing ? Icons.check : Icons.edit),
+            icon: Icon(
+              isEditing ? Icons.check : Icons.edit,
+              color: const Color.fromARGB(250, 218, 98, 17),
+            ),
             onPressed: () {
               setState(() {
                 isEditing = !isEditing;
@@ -38,80 +57,127 @@ class _ProfileManagementState extends State<ProfileManagement> {
           ),
         ],
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header
+
+            // 👤 PROFILE HEADER
             Container(
+              margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
-              child: isEditing
-                  ? _editField('Name', nameController, Colors.white)
-                  : Text(
-                      nameController.text,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+              child: Column(
+                children: [
+
+                  const CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Color.fromARGB(40, 218, 98, 17),
+                    child: Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Color.fromARGB(250, 218, 98, 17),
                     ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  isEditing
+                      ? _editHeaderField(nameController)
+                      : Text(
+                          nameController.text,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ],
+              ),
             ),
 
-            const SizedBox(height: 20),
-
-            // Fields
+            // 📋 PROFILE DETAILS
             _profileTile(Icons.email, 'Email', emailController),
             _profileTile(Icons.cake, 'Age', ageController),
             _profileTile(Icons.phone, 'Phone', phoneController),
-            _profileTile(Icons.person, 'Gender', genderController),
+            _profileTile(Icons.person_outline, 'Gender', genderController),
 
             const SizedBox(height: 20),
 
             if (isEditing)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isEditing = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    minimumSize: const Size(double.infinity, 48),
+                child: SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color.fromARGB(250, 218, 98, 17),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isEditing = false;
+                      });
+                    },
+                    child: const Text(
+                      'Save Profile',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  child: const Text('Save Profile'),
                 ),
               ),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
   }
 
+  // 🔹 PROFILE TILE
   Widget _profileTile(
       IconData icon, String label, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: Card(
-        shape: RoundedRectangleBorder(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: ListTile(
-          leading: Icon(icon),
+          leading: Icon(icon,
+              color: const Color.fromARGB(250, 218, 98, 17)),
           title: Text(label),
           subtitle: isEditing
               ? TextField(
                   controller: controller,
-                  decoration: const InputDecoration(border: InputBorder.none),
+                  decoration:
+                      const InputDecoration(border: InputBorder.none),
                 )
               : Text(controller.text),
         ),
@@ -119,16 +185,18 @@ class _ProfileManagementState extends State<ProfileManagement> {
     );
   }
 
-  Widget _editField(
-      String label, TextEditingController controller, Color color) {
+  // 🔹 EDIT NAME FIELD
+  Widget _editHeaderField(TextEditingController controller) {
     return TextField(
       controller: controller,
       textAlign: TextAlign.center,
-      style: TextStyle(color: color, fontSize: 22),
-      decoration: InputDecoration(
+      style: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      decoration: const InputDecoration(
         border: InputBorder.none,
-        hintText: label,
-        hintStyle: TextStyle(color: Colors.white70),
+        hintText: 'Name',
       ),
     );
   }

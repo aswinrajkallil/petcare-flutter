@@ -11,6 +11,7 @@ class Petprofile extends StatefulWidget {
 
 class _PetprofileState extends State<Petprofile> {
   String? selectedGender;
+  String selectedWeightUnit = "kg";
   File? profileImage;
 
   final ImagePicker picker = ImagePicker();
@@ -31,9 +32,23 @@ class _PetprofileState extends State<Petprofile> {
 
       // 🔹 APP BAR
       appBar: AppBar(
-        title: const Text("Add Pet"),
+        backgroundColor: Colors.white,
+        elevation: 1,
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(250, 218, 98, 17),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new,
+              color: Color.fromARGB(250, 218, 98, 17)),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          "Add Pet",
+          style: TextStyle(
+            color: Color.fromARGB(250, 218, 98, 17),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pacifico',
+          ),
+        ),
       ),
 
       body: SingleChildScrollView(
@@ -72,28 +87,66 @@ class _PetprofileState extends State<Petprofile> {
             const SizedBox(height: 16),
 
             buildTextField("Breed"),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            DropdownButtonFormField<String>(
-              value: selectedGender,
-              decoration: inputDecoration("Gender"),
-              items: const [
-                DropdownMenuItem(value: "Male", child: Text("Male")),
-                DropdownMenuItem(value: "Female", child: Text("Female")),
+            // 🔘 GENDER (SMALL RADIO)
+            Text(
+              "Gender",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 6),
+
+            Row(
+              children: [
+                compactRadio("Male"),
+                const SizedBox(width: 20),
+                compactRadio("Female"),
               ],
-              onChanged: (value) {
-                setState(() {
-                  selectedGender = value;
-                });
-              },
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
             buildTextField("Age", isNumber: true),
             const SizedBox(height: 16),
 
-            buildTextField("Weight", isNumber: true),
+            // ⚖️ WEIGHT WITH UNIT
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: inputDecoration("Weight"),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 233, 233, 233),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: DropdownButton<String>(
+                    value: selectedWeightUnit,
+                    underline: const SizedBox(),
+                    items: const [
+                      DropdownMenuItem(value: "kg", child: Text("kg")),
+                      DropdownMenuItem(value: "g", child: Text("g")),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedWeightUnit = value!;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+
             const SizedBox(height: 30),
 
             // ✅ ADD BUTTON
@@ -126,6 +179,39 @@ class _PetprofileState extends State<Petprofile> {
     );
   }
 
+  // 🔘 COMPACT RADIO WIDGET
+  Widget compactRadio(String value) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          selectedGender = value;
+        });
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Transform.scale(
+            scale: 0.85, // 👈 reduce radio size
+            child: Radio<String>(
+              value: value,
+              groupValue: selectedGender,
+              activeColor: const Color.fromARGB(250, 218, 98, 17),
+              onChanged: (val) {
+                setState(() {
+                  selectedGender = val;
+                });
+              },
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
   // 🔹 REUSABLE TEXT FIELD
   Widget buildTextField(String label, {bool isNumber = false}) {
     return TextFormField(
@@ -135,7 +221,7 @@ class _PetprofileState extends State<Petprofile> {
     );
   }
 
-  // 🔹 COMMON INPUT DECORATION (BACKGROUND COLOR ADDED)
+  // 🔹 COMMON INPUT DECORATION
   InputDecoration inputDecoration(String label) {
     return InputDecoration(
       labelText: label,

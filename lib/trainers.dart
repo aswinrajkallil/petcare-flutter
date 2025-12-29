@@ -1,7 +1,8 @@
+
 import 'package:flutter/material.dart';
 
-class Viewshop extends StatelessWidget {
-  const Viewshop({super.key});
+class Viewtrainers extends StatelessWidget {
+  const Viewtrainers({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class Viewshop extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Pet Shops',
+          'Trainers',
           style: TextStyle(
             color: Color.fromARGB(250, 218, 98, 17),
             fontSize: 22,
@@ -40,7 +41,7 @@ class Viewshop extends StatelessWidget {
             child: TextFormField(
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
-                labelText: 'Search shops',
+                labelText: 'Search trainers',
                 filled: true,
                 fillColor: const Color.fromARGB(255, 233, 233, 233),
                 border: OutlineInputBorder(
@@ -61,7 +62,7 @@ class Viewshop extends StatelessWidget {
             ),
           ),
 
-          // 🛍️ SHOP LIST
+          // 🧑‍🏫 TRAINER LIST
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -85,7 +86,7 @@ class Viewshop extends StatelessWidget {
                     child: Row(
                       children: [
 
-                        // 🖼 SHOP IMAGE
+                        // 🖼 TRAINER IMAGE
                         ClipRRect(
                           borderRadius: BorderRadius.circular(14),
                           child: Image.network(
@@ -104,7 +105,7 @@ class Viewshop extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: const [
                               Text(
-                                'AKB Pet Shop',
+                                'AKB Trainer',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -122,7 +123,7 @@ class Viewshop extends StatelessWidget {
                                       size: 16, color: Colors.orange),
                                   SizedBox(width: 4),
                                   Text(
-                                    '4.3 Reviews',
+                                    '4.6 Reviews',
                                     style: TextStyle(fontSize: 13),
                                   ),
                                 ],
